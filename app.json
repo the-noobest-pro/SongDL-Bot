@@ -1,0 +1,32 @@
+{
+    "name": "SongDL-Bot",
+    "description": "A bot that can download songs from YT",
+    "logo": "https://telegra.ph/file/45d311505e7d3954fb9dc.jpg",
+    "keywords": [
+        "SongDL-Bot",
+        "Song Downloader",
+        "Telegram Bot"
+    ],
+    "repository": "https://github.com/me-piro-786/SongDL-Bot",
+    "env": {
+        "BOT_TOKEN": {
+            "description": "Your Telegram Bot Token from @BotFather",
+            "value": ""
+        }
+    },
+    "addons": [],
+    "buildpacks": [
+        {
+            "url": "heroku/python"
+        },
+        {
+            "url": "https://github.com/jonathanong/heroku-buildpack-ffmpeg-latest"
+        }
+    ],
+    "formation": {
+        "worker": {
+            "quantity": 1,
+            "size": "free"
+        }
+    }
+}
