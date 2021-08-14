@@ -72,7 +72,7 @@ async def song(_, message):
             dur += (int(dur_arr[i]) * secmul)
             secmul *= 60
         await shed.edit("📤 Uploading...")
-        s = await message.reply_audio(audio_file, caption=rep, disable_web_page_preview=True, thumb=thumb_name, parse_mode='md', title=title, duration=dur)
+        s = await message.reply_audio(audio_file, caption=rep, thumb=thumb_name, parse_mode='md', title=title, duration=dur)
         await shed.delete()
     except Exception as e:
         await shed.edit("❌ Error")
