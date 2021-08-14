@@ -66,13 +66,13 @@ async def song(_, message):
             info_dict = ydl.extract_info(link, download=False)
             audio_file = ydl.prepare_filename(info_dict)
             ydl.process_info(info_dict)
-        rep = " "
+        rep = f"**Song 🎶 :** [{title}]({link}) \n**Duration 🕑 :** `{duration}` \n**Requested For 🔍 :** `{query}`"
         secmul, dur, dur_arr = 1, 0, duration.split(':')
         for i in range(len(dur_arr)-1, -1, -1):
             dur += (int(dur_arr[i]) * secmul)
             secmul *= 60
         await shed.edit("📤 Uploading...")
-        s = await message.reply_audio(audio_file, caption=rep, thumb=thumb_name, parse_mode='md', title=title, duration=dur)
+        s = await message.reply_audio(audio_file, caption=rep, disable_web_page_preview=True, thumb=thumb_name, parse_mode='md', title=title, duration=dur)
         await shed.delete()
     except Exception as e:
         await shed.edit("❌ Error")
