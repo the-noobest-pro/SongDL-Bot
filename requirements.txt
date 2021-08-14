@@ -4,5 +4,5 @@ youtube_dl
 aiohttp
 pyrogram
 tgcrypto
-youtube_search
+youtube_search_python
 asyncio
