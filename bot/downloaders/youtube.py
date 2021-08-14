@@ -4,16 +4,9 @@ from youtube_dl import YoutubeDL
 
 ytdl = YoutubeDL(
     {
-        "format": "bestaudio/best",
+        "format": "bestaudio[ext=m4a]",
         "writethumbnail": True,
         "outtmpl": 'downloads/%(id)s.%(ext)s',
-        "postprocessors": [
-            {
-                "key": "FFmpegExtractAudio",
-                "preferredcodec": "mp3",
-                "preferredquality": "320",
-            }
-        ],
     }
 )
 
@@ -21,4 +14,4 @@ ytdl = YoutubeDL(
 def download(url: str) -> str:
     info = ytdl.extract_info(url, False)
     ytdl.download([url])
-    return path.join('downloads', f"{info['id']}.mp3")
+    return path.join('downloads', f"{info['id']}.{info['ext']}")
