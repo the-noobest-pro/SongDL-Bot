@@ -11,7 +11,7 @@ ytdl = YoutubeDL(
             {
                 "key": "FFmpegExtractAudio",
                 "preferredcodec": "mp3",
-                "preferredquality": "192",
+                "preferredquality": "320",
             }
         ],
     }
