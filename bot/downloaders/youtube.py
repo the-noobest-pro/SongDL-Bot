@@ -4,11 +4,16 @@ from youtube_dl import YoutubeDL
 
 ytdl = YoutubeDL(
     {
-        'format': 'bestaudio/best',
-        'geo-bypass': True,
-        'nocheckcertificate': True,
-        'outtmpl': 'downloads/%(id)s.%(ext)s',
-    },
+        "format": "bestaudio/best",
+        "writethumbnail": True,
+        "postprocessors": [
+            {
+                "key": "FFmpegExtractAudio",
+                "preferredcodec": "mp3",
+                "preferredquality": "192",
+            }
+        ],
+    }
 )
 
 
