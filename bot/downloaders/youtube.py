@@ -6,7 +6,7 @@ ytdl = YoutubeDL(
     {
         "format": "bestaudio/best",
         "writethumbnail": True,
-        "outtmpl": 'downloads/%(id)s.%(ext)s'
+        "outtmpl": 'downloads/%(id)s.%(ext)s',
         "postprocessors": [
             {
                 "key": "FFmpegExtractAudio",
