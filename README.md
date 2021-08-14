@@ -2,9 +2,11 @@
 
 A Telegram Bot that can download High Quality Songs from YouTube 
 
-## Heroku Deploy
+## Deploy
 
-<p align="center"><a href="https://heroku.com/deploy?template=https://github.com/me-piro-786/SongDL-Bot"> <img src="https://img.shields.io/badge/Deploy%20To%20Heroku-blueviolet?style=for-the-badge&logo=heroku" alt="Heroku Deploy" width="210" height="34.45"/></a></p>
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+
+[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/new/template?template=https%3A%2F%2Fgithub.com%2Fme-piro-786%2FSongDL-Bot&envs=BOT_TOKEN&optionalEnvs=BOT_TOKENDesc=Bot+Token+from+%40BotFather)
 
 ## Credits
 - [Dan](https://github.com/delivrance) for [Pyrogram](https://github.com/pyrogram/pyrogram)
