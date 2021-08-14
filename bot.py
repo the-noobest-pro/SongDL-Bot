@@ -1,11 +1,13 @@
 import os
+import random
+import time
 import logging
 import requests
 import aiohttp
 import json
-import youtube_dl
+from youtube_dl import YoutubeDL
 from pyrogram import filters, Client, idle
-from youtube_search import YoutubeSearch
+from youtubesearchpython import SearchVideos
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup 
 from config import API_ID, API_HASH, BOT_TOKEN
 
@@ -41,50 +43,63 @@ async def song(_, message):
     query = message.text.split(None, 1)[1]
     user_name = message.from_user.first_name
     shed = await message.reply("🔎 Finding the Song...")
-    ydl_opts = {"format": "bestaudio[ext=m4a]"}
+    opts = {
+        "format": "bestaudio",
+        "addmetadata": True,
+        "key": "FFmpegMetadata",
+        "writethumbnail": True,
+        "prefer_ffmpeg": True,
+        "nocheckcertificate": True,
+        "postprocessors": [
+            {
+                "key": "FFmpegExtractAudio",
+                "preferredcodec": "mp3",
+                "preferredquality": "320",
+            }
+        ],
+        "outtmpl": "%(id)s.mp3",
+        "quiet": True,
+        "logtostderr": False,
+    }
     try:
-        results = YoutubeSearch(query, max_results=1).to_dict()
-        link = f"https://youtube.com{results[0]['url_suffix']}"
-        print(results)
-        title = results[0]["title"][:40]
-        thumbnail = results[0]["thumbnails"][0]
-        thumb_name = f"thumb{title}.jpg"
-        thumb = requests.get(thumbnail, allow_redirects=True)
-        open(thumb_name, "wb").write(thumb.content)
-
-        duration = results[0]["duration"]
-        results[0]["url_suffix"]
-        results[0]["views"]
+        search = SearchVideos(query, offset=1, mode="json", max_results=1)
+        test = search.result()
+        p = json.loads(test)
+        q = p.get("search_result")
+        url = q[0]["link"]
 
     except Exception as e:
         await shed.edit(
-            "❌ Found Nothing.\n\nTry another keyword or maybe spell it properly."
+            "❌ Found Nothing.\nTry another keyword or maybe spell it properly."
         )
         print(str(e))
         return
     await shed.edit("📥 Downloading...")
     try:
-        with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-            info_dict = ydl.extract_info(link, download=False)
-            audio_file = ydl.prepare_filename(info_dict)
-            ydl.process_info(info_dict)
-        rep = f"**🎶 Song Name :** [{title}]({link}) \n**👤 Requested By :** {user_name} \n**🔍 Requested For :** `{query}`"
-        secmul, dur, dur_arr = 1, 0, duration.split(':')
-        for i in range(len(dur_arr)-1, -1, -1):
-            dur += (int(dur_arr[i]) * secmul)
-            secmul *= 60
-        await shed.edit("📤 Uploading...")
-        s = await message.reply_audio(audio_file, caption=rep, thumb=thumb_name, parse_mode='md', title=title, duration=dur)
+        with YoutubeDL(opts) as rip:
+            rip_data = rip.extract_info(url)
+            rip_file = rip.prepare_filename(rip_data)
+            
+        dir = os.listdir()
+        if f"{rip_data['id']}.mp3.jpg" in dir:
+            thumb = f"{rip_data['id']}.mp3.jpg"
+        elif f"{rip_data['id']}.mp3.webp" in dir:
+            thumb = f"{rip_data['id']}.mp3.webp"
+        else:
+            thumb = None
+        tail = time.time()
+        CAPT = f"**🎶 Song -** [{rip_data['title']}]({url}) \n**👤 Req. By -** `{user_name}` \n"
+        s = await message.reply_audio(rip_file, caption=CAPT, thumb=thumb, parse_mode='md', title=str(rip_data["title"]), duration=int(rip_data["duration"]))
         await shed.delete()
     except Exception as e:
         await shed.edit("❌ Error")
         print(e)
 
     try:
-        os.remove(audio_file)
-        os.remove(thumb_name)
+        os.remove(f"{rip_data['id']}.mp3")
+        os.remove(thumb)
     except Exception as e:
         print(e)
 
 bot.start()
-idle() 
+idle()
