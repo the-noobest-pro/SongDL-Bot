@@ -4,7 +4,7 @@ from youtube_dl import YoutubeDL
 
 ytdl = YoutubeDL(
     {
-        "format": "bestaudio[ext=m4a]",
+        "format": "bestaudio[ext=mp3]",
         "writethumbnail": True,
         "outtmpl": 'downloads/%(id)s.%(ext)s',
     }
