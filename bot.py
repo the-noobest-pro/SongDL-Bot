@@ -58,7 +58,7 @@ async def song(_, message):
             }
         ],
         "outtmpl": "%(id)s.mp3",
-        "quiet": True,
+        "quiet": False,
         "logtostderr": False,
     }
     try:
