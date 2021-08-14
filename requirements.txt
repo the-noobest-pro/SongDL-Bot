@@ -6,4 +6,3 @@ pyrogram
 tgcrypto
 youtube_search
 asyncio
-wget
