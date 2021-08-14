@@ -120,7 +120,7 @@ async def song(_, message):
         return
     await shed.edit("📥 Downloading...")
     try:
-        audio_file=
+        audio_file = youtube.download(link)
         rep = f"**🎶 Song Name :** [{title}]({link}) \n**👤 Requested By :** {user_name} \n**🔍 Requested For :** `{query}`"
         secmul, dur, dur_arr = 1, 0, duration.split(':')
         for i in range(len(dur_arr)-1, -1, -1):
