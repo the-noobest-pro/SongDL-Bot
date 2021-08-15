@@ -1,3 +1,5 @@
+# Thanks to TeamUltroid for their Song Module.
+
 import os
 import random
 import time
