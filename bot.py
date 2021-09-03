@@ -5,7 +5,6 @@ import random
 import time
 import logging
 import requests
-import subprocess
 import aiohttp
 import json
 from youtube_dl import YoutubeDL
@@ -80,8 +79,7 @@ async def song(_, message):
     await shed.edit("📥 Downloading...")
     try:
         with YoutubeDL(opts) as rip:
-            rip_data = rip.extract_info(url, download=False)
-            subproc = subprocess.Popen(rip.extract_info(url))
+            rip_data = rip.extract_info(url)
             rip_file = rip.prepare_filename(rip_data)
             
         dir = os.listdir()
