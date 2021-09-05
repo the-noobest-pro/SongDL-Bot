@@ -14,6 +14,7 @@ from Python_ARQ import ARQ
 from youtube_dl import YoutubeDL
 from pyrogram import filters, Client, idle
 from youtubesearchpython import SearchVideos
+from pyrogram.types import Message
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup 
 from config import API_ID, API_HASH, BOT_TOKEN, ARQ_API_KEY, ARQ_API_URL
 
