@@ -6,3 +6,4 @@ pyrogram
 tgcrypto
 youtube_search_python==1.4.6
 asyncio
+python-arq
