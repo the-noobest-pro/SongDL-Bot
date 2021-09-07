@@ -215,8 +215,7 @@ async def inline_query_handler(client, query):
             answers.append(
                 InlineQueryResultPhoto(
                     photo_url=result["thumbnails"][0]["url"],
-                    title=result["title"],
-                    caption=f"**🎶 Song** - [{songname}]({url})",
+                    title=result["title"],                    
                     description="{}, {} views.".format(
                         result["duration"], result["viewCount"]["short"]
                     ),
@@ -234,7 +233,7 @@ async def inline_query_handler(client, query):
                             ]
                         ]
                     ),
-                    input_message_content="Op",
+                    caption=f"**🎶 Song** - [{songname}]({url})",
                 )   
             )
         await client.answer_inline_query(query.id, cache_time=0, results=answers)
