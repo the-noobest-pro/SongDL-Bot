@@ -279,7 +279,7 @@ async def yt_dl_audio(client, cb):
         except Exception as e:
             print (e)
     else:
-        await cb.edit_message_media(InputMediaAudio(db_file, title=db_title))      
+        await cb.edit_message_media(InputMediaAudio(db_file, title=db_title)))   
 
 bot.start()
 idle()
