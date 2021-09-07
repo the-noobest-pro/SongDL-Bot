@@ -35,6 +35,25 @@ bot = Client(
 aiohttpsession = ClientSession()
 arq = ARQ(ARQ_API_URL, ARQ_API_KEY, aiohttpsession)
 
+opts = {
+    "format": "bestaudio",
+    "addmetadata": True,
+    "key": "FFmpegMetadata",
+    "writethumbnail": True,
+    "prefer_ffmpeg": True,
+    "nocheckcertificate": True,
+    "postprocessors": [
+        {
+            "key": "FFmpegExtractAudio",
+            "preferredcodec": "mp3",
+            "preferredquality": "320",
+        }
+    ],
+    "outtmpl": "%(id)s.mp3",
+    "quiet": False,
+    "logtostderr": False,
+}
+
 async def quotify(messages: list):
     response = await arq.quotly(messages)
     if not response.ok:
@@ -81,24 +100,7 @@ async def song(_, message):
     query = message.text.split(None, 1)[1]
     user_name = message.from_user.first_name
     shed = await message.reply("🔎 Finding the Song...")
-    opts = {
-        "format": "bestaudio",
-        "addmetadata": True,
-        "key": "FFmpegMetadata",
-        "writethumbnail": True,
-        "prefer_ffmpeg": True,
-        "nocheckcertificate": True,
-        "postprocessors": [
-            {
-                "key": "FFmpegExtractAudio",
-                "preferredcodec": "mp3",
-                "preferredquality": "320",
-            }
-        ],
-        "outtmpl": "%(id)s.mp3",
-        "quiet": False,
-        "logtostderr": False,
-    }
+    
     try:
         search = VideosSearch(query, limit=1)
         for result in search.result()["result"]:
