@@ -240,6 +240,13 @@ async def inline_query_handler(client, query):
                 )   
             )
         await client.answer_inline_query(query.id, cache_time=0, results=answers)
+        try:
+            with YoutubeDL(opts) as rip:
+                rip_data = rip.extract_info(url)
+                rip_file = rip.prepare_filename(rip_data)
+            await client.edit_inline_media(query.id, InputMediaAudio(rip_file))
+        except Exception as e:
+            print (e)
 
 @bot.on_callback_query(filters.regex(pattern="ytdl_(.*)_audio"))
 async def yt_dl_audio(client, cb):
