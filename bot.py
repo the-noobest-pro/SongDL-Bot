@@ -105,7 +105,11 @@ async def song(_, message):
     try:
         search = VideosSearch(query, limit=1)
         for result in search.result()["result"]:
-            url = f"https://www.youtube.com/watch?v={result['id']}"
+            ytid = result['id']
+            url = f"https://www.youtube.com/watch?v={ytid}"
+            songname = result['title']
+            thumbdata = result["thumbnails"][0]["url"]
+            dur = result["duration"]
     except Exception as e:
         await shed.edit(
             "❌ Found Nothing.\nTry another keyword or maybe spell it properly."
@@ -113,32 +117,42 @@ async def song(_, message):
         print(str(e))
         return
     await shed.edit("📥 Downloading...")
-    try:
-        with YoutubeDL(opts) as rip:
-            rip_data = rip.extract_info(url)
-            rip_file = rip.prepare_filename(rip_data)
+    c = 0
+    async for t in client.search_messages(-1001574914096, query=f"{ytid}.mp3", filter="audio"):
+        c += 1
+        db_file = t.audio.file_id
+        db_title = t.caption
+    if c==0:
+        try:
+            with YoutubeDL(opts) as rip:
+                rip_data = rip.extract_info(url)
+                rip_file = rip.prepare_filename(rip_data)
             
-        dir = os.listdir()
-        if f"{rip_data['id']}.mp3.jpg" in dir:
-            thumb = f"{rip_data['id']}.mp3.jpg"
-        elif f"{rip_data['id']}.mp3.webp" in dir:
-            thumb = f"{rip_data['id']}.mp3.webp"
-        else:
-            thumb = None
-        tail = time.time()
-        CAPT = f"**🎶 Song -** [{rip_data['title']}]({url}) \n**👤 Req. By -** `{user_name}` \n"
-        s = await message.reply_audio(rip_file, caption=CAPT, thumb=thumb, parse_mode='md', title=str(rip_data["title"]), duration=int(rip_data["duration"]))
-        await shed.delete()
-    except Exception as e:
-        await shed.edit("❌ Error")
-        print(e)
+            dir = os.listdir()
+            if f"{rip_data['id']}.mp3.jpg" in dir:
+                thumb = f"{rip_data['id']}.mp3.jpg"
+            elif f"{rip_data['id']}.mp3.webp" in dir:
+                thumb = f"{rip_data['id']}.mp3.webp"
+            else:
+                thumb = None
+            tail = time.time()
+            CAPT = f"**🎶 Song -** [{rip_data['title']}]({url}) \n**👤 Req. By -** `{user_name}` \n"
+            s = await message.reply_audio(rip_file, caption=CAPT, thumb=thumb, parse_mode='md', title=str(rip_data["title"]), duration=int(rip_data["duration"]))
+            await client.send_audio(-1001574914096, rip_file, title=f"{ytid}.mp3", caption=str(rip_data["title"]), thumb=thumb, duration=int(rip_data["duration"]))
+            await shed.delete()
+            try:
+                os.remove(f"{rip_data['id']}.mp3")
+                os.remove(thumb)
+            except Exception as eo:
+                print(eo)
+        except Exception as e:
+            await shed.edit("❌ Error")
+            print(e)
+    else:
+        CAPTIONS = f"**🎶 Song -** [{songname}]({url}) \n**👤 Req. By -** `{user_name}` \n"
+        await message.reply_audio(db_file, caption=CAPTIONS, thumb=thumbdata, parse_mode='md', title=songname, duration=dur)
 
-    try:
-        os.remove(f"{rip_data['id']}.mp3")
-        os.remove(thumb)
-    except Exception as e:
-        print(e)
-
+   
 @bot.on_message(filters.command(["q", "quote"]) & ~filters.edited)
 async def quotly_func(client, message: Message):
     if not message.reply_to_message:
@@ -214,6 +228,7 @@ async def inline_query_handler(client, query):
         search = VideosSearch(text, limit=10)
         for result in search.result()["result"]:
             url = f"https://www.youtube.com/watch?v={result['id']}"
+            ytid = result['id']
             songname = result["title"]
             answers.append(
                 InlineQueryResultPhoto(
@@ -227,7 +242,7 @@ async def inline_query_handler(client, query):
                             [
                                 InlineKeyboardButton(
                                     text="Download",
-                                    callback_data=f"ytdl_{url}_audio"
+                                    callback_data=f"ytdl_{ytid}_audio"
                                 ),
                                 InlineKeyboardButton(
                                     text="Search",
@@ -245,18 +260,26 @@ async def inline_query_handler(client, query):
 
 @bot.on_callback_query(filters.regex(pattern="ytdl_(.*)_audio"))
 async def yt_dl_audio(client, cb):
-    url = cb.matches[0].group(1)
-    oops = await cb.edit_message_text("`Downloading...`")
-    try:
-        with YoutubeDL(opts) as rip:
-            rip_data = rip.extract_info(url)
-            rip_file = rip.prepare_filename(rip_data)
-        ohhkay = await client.send_audio(-1001574914096, rip_file)
-        await asyncio.sleep(2)
-        await cb.edit_message_media(InputMediaAudio(f"{ohhkay.audio.file_id}"))
-    except Exception as e:
-        print (e)
-
+    ytid = cb.matches[0].group(1)
+    url = f"https://www.youtube.com/watch?v={ytid}"
+    d = 0
+    async for t in client.search_messages(-1001574914096, query=f"{ytid}.mp3", filter="audio"):
+        d += 1
+        db_file = t.audio.file_id
+        db_title = t.caption
+    if d==0:
+        oops = await cb.edit_message_text("`Downloading...`")
+        try:
+            with YoutubeDL(opts) as rip:
+                rip_data = rip.extract_info(url)
+                rip_file = rip.prepare_filename(rip_data)
+            ohhkay = await client.send_audio(-1001574914096, rip_file, title=f"{ytid}.mp3", caption=str(rip_data["title"]), duration=int(rip_data["duration"]))
+            await asyncio.sleep(1)
+            await cb.edit_message_media(InputMediaAudio(f"{ohhkay.audio.file_id}", title=str(rip_data["title"]))
+        except Exception as e:
+            print (e)
+    else:
+        await cb.edit_message_media(InputMediaAudio(db_file, title=db_title))      
 
 bot.start()
 idle()
