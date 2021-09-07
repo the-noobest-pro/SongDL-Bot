@@ -262,7 +262,7 @@ async def yt_dl_audio(client, cb):
             thumb = f"{rip_data['id']}.mp3.webp"
         else:
             thumb = None
-        ohhkay = await client.send_audio(-1001574914096, rip_file, duration=int(rip_data["duration"]), title=str(rip_data["title"]), thumb=thumb)
+        ohhkay = await client.send_audio(-1001598544910, rip_file, duration=int(rip_data["duration"]), title=str(rip_data["title"]), thumb=thumb)
         await asyncio.sleep(1)
         CAPT = f"**🎶 Song -** [{rip_data['title']}]({url})"
         await cb.edit_message_media(InputMediaAudio(f"{ohhkay.audio.file_id}", caption=CAPT))
