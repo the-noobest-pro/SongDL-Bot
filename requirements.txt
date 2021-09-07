@@ -4,6 +4,6 @@ youtube_dl
 aiohttp
 pyrogram
 tgcrypto
-youtube_search_python==1.4.6
+youtube_search_python
 asyncio
 python-arq
