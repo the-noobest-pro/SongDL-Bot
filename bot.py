@@ -275,11 +275,11 @@ async def yt_dl_audio(client, cb):
                 rip_file = rip.prepare_filename(rip_data)
             ohhkay = await client.send_audio(-1001574914096, rip_file, title=f"{ytid}.mp3", caption=str(rip_data["title"]), duration=int(rip_data["duration"]))
             await asyncio.sleep(1)
-            await cb.edit_message_media(InputMediaAudio(f"{ohhkay.audio.file_id}", title=str(rip_data["title"]))
+            await cb.edit_message_media(InputMediaAudio(f"{ohhkay.audio.file_id}", title=str(rip_data["title"])))
         except Exception as e:
             print (e)
     else:
-        await cb.edit_message_media(InputMediaAudio(db_file, title=db_title)))   
+        await cb.edit_message_media(InputMediaAudio(db_file, title=db_title))
 
 bot.start()
 idle()
