@@ -220,7 +220,6 @@ async def inline_query_handler(client, query):
                     ),
                     input_message_content=InputTextMessageContent(
                         f"[{songname}]({url})"
-                        )
                     ),
                     reply_markup=InlineKeyboardMarkup(
                         [
