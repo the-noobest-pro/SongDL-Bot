@@ -14,7 +14,7 @@ from Python_ARQ import ARQ
 from youtube_dl import YoutubeDL
 from pyrogram import filters, Client, idle
 from youtubesearchpython import VideosSearch
-from pyrogram.types import Message
+from pyrogram.types import Message, InputMediaAudio
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup 
 from pyrogram.types import (
     InlineQueryResultArticle,
