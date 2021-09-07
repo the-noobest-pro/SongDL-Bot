@@ -216,9 +216,12 @@ async def inline_query_handler(client, query):
             url = f"https://www.youtube.com/watch?v={result['id']}"
             ytid = result['id']
             songname = result["title"]
+            thumbid = result["thumbnails"][0]["url"]
+            split = thumbid.split("?")
+            photoid = split[0].strip()
             answers.append(
                 InlineQueryResultPhoto(
-                    photo_url="https://telegra.ph/file/da1d2f65d4b824040c3c2.jpg",
+                    photo_url=photoid,
                     title=result["title"],                    
                     description="{}, {} views.".format(
                         result["duration"], result["viewCount"]["short"]
@@ -238,7 +241,6 @@ async def inline_query_handler(client, query):
                         ]
                     ),
                     caption=f"**🎶 Song** - [{songname}]({url})",
-                    thumb_url=result["thumbnails"][0]["url"],
                 )   
             )
         await client.answer_inline_query(query.id, cache_time=0, results=answers)
