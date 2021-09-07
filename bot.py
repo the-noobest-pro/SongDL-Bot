@@ -214,7 +214,7 @@ async def inline_query_handler(client, query):
             songname = result["title"]
             answers.append(
                 InlineQueryResultPhoto(
-                    photo_url=result["thumbnails"][0]["url"],
+                    photo_url="https://telegra.ph/file/da1d2f65d4b824040c3c2.jpg",
                     title=result["title"],                    
                     description="{}, {} views.".format(
                         result["duration"], result["viewCount"]["short"]
@@ -234,6 +234,7 @@ async def inline_query_handler(client, query):
                         ]
                     ),
                     caption=f"**🎶 Song** - [{songname}]({url})",
+                    thumb_url=result["thumbnails"][0]["url"],
                 )   
             )
         await client.answer_inline_query(query.id, cache_time=0, results=answers)
