@@ -16,6 +16,11 @@ from pyrogram import filters, Client, idle
 from youtubesearchpython import VideosSearch
 from pyrogram.types import Message
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup 
+from pyrogram.types import (
+    InlineQueryResultArticle,
+    InlineQueryResultPhoto,
+    InputTextMessageContent,
+)
 from config import API_ID, API_HASH, BOT_TOKEN, ARQ_API_KEY, ARQ_API_URL
 
 
@@ -190,6 +195,51 @@ async def quotly_func(client, message: Message):
         e = format_exc()
         print(e)
 
+@bot.on_inline_query()
+async def inline_query_handler(client, query):
+    answers = []
+    text = query.query.lower()
+    if text == "":
+        await client.answer_inline_query(
+            query.id,
+            results=answers,
+            switch_pm_text="Type a YouTube Video Name...",
+            switch_pm_parameter="start",
+            cache_time=0,
+         )
+    else:
+        search = VideosSearch(text, limit=10)
+        for result in search.result()["result"]:
+            url = f"https://www.youtube.com/watch?v={result['id']}"
+            songname = result["title"]
+            answers.append(
+                InlineQueryResultArticle(
+                    title=result["title"],
+                    description="{}, {} views.".format(
+                        result["duration"], result["viewCount"]["short"]
+                    ),
+                    input_message_content=InputTextMessageContent(
+                        f"[{songname}]({url})"
+                        )
+                    ),
+                    reply_markup=InlineKeyboardMarkup(
+                        [
+                            [
+                                InlineKeyboardButton(
+                                    text="Download",
+                                    callback_data=f"ytdl_{url}_audio"
+                                ),
+                                InlineKeyboardButton(
+                                    text="Search",
+                                    switch_inline_query_current_chat=""
+                                )
+                            ]
+                        ]
+                    ),
+                    thumb_url=result["thumbnails"][0]["url"],
+                )
+            )
+        await client.answer_inline_query(query.id, cache_time=0, results=answers)
 
 bot.start()
 idle()
