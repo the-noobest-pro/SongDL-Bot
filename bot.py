@@ -251,8 +251,9 @@ async def yt_dl_audio(client, cb):
         with YoutubeDL(opts) as rip:
             rip_data = rip.extract_info(url)
             rip_file = rip.prepare_filename(rip_data)
+        ohhkay = await client.send_audio(-1001574914096, rip_file)
         await asyncio.sleep(2)
-        await cb.edit_message_media(InputMediaAudio(f"/app/{rip_file}"))
+        await cb.edit_message_media(InputMediaAudio(f"{ohhkay.audio.file_id}"))
     except Exception as e:
         print (e)
 
