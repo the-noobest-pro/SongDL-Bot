@@ -13,7 +13,7 @@ from traceback import format_exc
 from Python_ARQ import ARQ
 from youtube_dl import YoutubeDL
 from pyrogram import filters, Client, idle
-from youtubesearchpython import SearchVideos
+from youtubesearchpython import VideosSearch
 from pyrogram.types import Message
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup 
 from config import API_ID, API_HASH, BOT_TOKEN, ARQ_API_KEY, ARQ_API_URL
@@ -95,12 +95,9 @@ async def song(_, message):
         "logtostderr": False,
     }
     try:
-        search = SearchVideos(query, offset=1, mode="json", max_results=1)
-        test = search.result()
-        p = json.loads(test)
-        q = p.get("search_result")
-        url = q[0]["link"]
-
+        search = VideosSearch(query, limit=1)
+        for result in search.result()["result"]:
+            url = f"https://www.youtube.com/watch?v={result['id']}"
     except Exception as e:
         await shed.edit(
             "❌ Found Nothing.\nTry another keyword or maybe spell it properly."
