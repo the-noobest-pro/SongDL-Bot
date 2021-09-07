@@ -95,7 +95,7 @@ async def start(_, message):
 
 
 @bot.on_message(filters.command("song") & ~filters.edited)
-async def song(_, message):
+async def song(client, message):
     if len(message.command) < 2:
        return await message.reply("**Usage:**\n - `/song [query]`")
     query = message.text.split(None, 1)[1]
