@@ -244,13 +244,12 @@ async def inline_query_handler(client, query):
 @bot.on_callback_query(filters.regex(pattern="ytdl_(.*)_audio"))
 async def yt_dl_audio(client, cb):
     url = cb.matches[0].group(1)
-    await cb.edit_message_text("`Downloading...`")
+    oops = await cb.edit_message_text("`Downloading...`")
     try:
         with YoutubeDL(opts) as rip:
             rip_data = rip.extract_info(url)
             rip_file = rip.prepare_filename(rip_data)
         await cb.edit_message_media(rip_file)
-        await cb.edit_message_text(f"**🎶 Song -** [{rip_data['title']}]({url}) \n**👤 Req. By -** `Bot` \n")
     except Exception as e:
         print (e)
 
