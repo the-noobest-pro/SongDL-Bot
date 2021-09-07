@@ -234,6 +234,7 @@ async def inline_query_handler(client, query):
                             ]
                         ]
                     ),
+                    input_message_content=f"**🎶 Song** - [{songname}]({url})",
                 )   
             )
         await client.answer_inline_query(query.id, cache_time=0, results=answers)
