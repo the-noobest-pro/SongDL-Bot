@@ -285,7 +285,7 @@ async def yt_dl_video(client, cb):
             botid = await client.get_messages(-1001534923889, repvid.message_id)
             await cb.edit_message_media(InputMediaVideo(media=f"{botid.video.file_id}", caption=url))
         else:
-            await oops.edit(f"Error - {x.text}")
+            await cb.edit_message_text(f"Error - {x.text}")
 
 
 bot.start()
