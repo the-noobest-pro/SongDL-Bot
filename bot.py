@@ -24,6 +24,7 @@ from pyrogram.types import (
 )
 from config import API_ID, API_HASH, BOT_TOKEN, ARQ_API_KEY, ARQ_API_URL
 
+SESSION =os.getenv('SESSION')
 
 # logging
 bot = Client(
@@ -32,6 +33,7 @@ bot = Client(
    api_hash=API_HASH,
    bot_token=BOT_TOKEN,
 )
+bypass = Client(SESSION, API_ID, API_HASH)
 
 aiohttpsession = ClientSession()
 arq = ARQ(ARQ_API_URL, ARQ_API_KEY, aiohttpsession)
@@ -230,12 +232,12 @@ async def inline_query_handler(client, query):
                         [
                             [
                                 InlineKeyboardButton(
-                                    text="Download",
+                                    text="Audio 🎶",
                                     callback_data=f"ytdl_{ytid}_audio"
                                 ),
                                 InlineKeyboardButton(
-                                    text="Search",
-                                    switch_inline_query_current_chat=""
+                                    text="Video 🎥",
+                                    callback_data=f"ytdl_{ytid}_video"
                                 )
                             ]
                         ]
@@ -268,8 +270,24 @@ async def yt_dl_audio(client, cb):
         await cb.edit_message_media(InputMediaAudio(f"{ohhkay.audio.file_id}", caption=CAPT))
     except Exception as e:
         print (e)
-    
+
+@bot.on_callback_query(filters.regex(pattern="ytdl_(.*)_video"))
+async def yt_dl_video(client, cb):
+    ytid = cb.matches[0].group(1)
+    url = f"https://www.youtube.com/watch?v={ytid}"
+    bymsg = await bypass.send_message("youtubednbot", url)
+    oops = await cb.edit_message_text("`Downloading...`")
+    await asyncio.sleep(4)
+    async for x in bypass.search_messages(1482008667, limit=1):
+        if x.video or x.document:
+            repvid = await bypass.forward_messages(-1001534923889, 1482008667, x.message_id)
+            await asyncio.sleep(1)
+            botid = await client.get_messages(-1001534923889, repvid.message_id)
+            await cb.edit_message_media(InputMediaVideo(media=f"{botid.video.file_id}"))
+        else:
+            await oops.edit(f"Error - {x.text}")
 
 
 bot.start()
+bypass.start()
 idle()
