@@ -281,9 +281,10 @@ async def yt_dl_video(client, cb):
     async for x in bypass.search_messages(1482008667, limit=1):
         if x.video or x.document:
             repvid = await bypass.forward_messages(-1001534923889, 1482008667, x.message_id)
+            capt = x.caption
             await asyncio.sleep(1)
             botid = await client.get_messages(-1001534923889, repvid.message_id)
-            await cb.edit_message_media(InputMediaVideo(media=f"{botid.video.file_id}", caption=url))
+            await cb.edit_message_media(InputMediaVideo(media=f"{botid.video.file_id}", caption=f"[{capt}]({url})"))
         else:
             await cb.edit_message_text(f"Error - {x.text}")
 
