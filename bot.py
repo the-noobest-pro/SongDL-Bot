@@ -60,7 +60,7 @@ opts = {
 def _get_name(from_user: User) -> str:
     return f"{from_user.first_name} {from_user.last_name or ''}".rstrip()
 
-async def sasta_quotly(self, messages: [Message]):
+async def sasta_quotly(messages: [Message]):
     """
     Returns An Object.
             Parameters:
