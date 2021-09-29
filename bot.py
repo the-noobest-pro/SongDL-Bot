@@ -52,7 +52,7 @@ opts = {
             "preferredquality": "320",
         }
     ],
-    "outtmpl": "%(id)s",
+    "outtmpl": "%(id)s.m4a",
     "quiet": False,
     "logtostderr": False,
 }
@@ -123,10 +123,10 @@ async def song(client, message):
                 rip_file = rip.prepare_filename(rip_data)
             
             dir = os.listdir()
-            if f"{rip_data['id']}.jpg" in dir:
-                thumb = f"{rip_data['id']}.jpg"
-            elif f"{rip_data['id']}.webp" in dir:
-                thumb = f"{rip_data['id']}.webp"
+            if f"{rip_data['id']}.m4a.jpg" in dir:
+                thumb = f"{rip_data['id']}.m4a.jpg"
+            elif f"{rip_data['id']}.m4a.webp" in dir:
+                thumb = f"{rip_data['id']}.m4a.webp"
             else:
                 thumb = None
             tail = time.time()
@@ -135,7 +135,7 @@ async def song(client, message):
             await shed.delete()
             try:
                 os.remove(f"{rip_data['id']}.mp3")
-                os.remove(f"{rip_data['id']}")
+                os.remove(f"{rip_data['id']}.m4a")
                 os.remove(thumb)
             except Exception as eo:
                 print(eo)
@@ -260,10 +260,10 @@ async def yt_dl_audio(client, cb):
             rip_data = rip.extract_info(url)
             rip_file = rip.prepare_filename(rip_data)
         dir = os.listdir()
-        if f"{rip_data['id']}.jpg" in dir:
-            thumb = f"{rip_data['id']}.jpg"
-        elif f"{rip_data['id']}.webp" in dir:
-            thumb = f"{rip_data['id']}.webp"
+        if f"{rip_data['id']}.m4a.jpg" in dir:
+            thumb = f"{rip_data['id']}.m4a.jpg"
+        elif f"{rip_data['id']}.m4a.webp" in dir:
+            thumb = f"{rip_data['id']}.m4a.webp"
         else:
             thumb = None
         ohhkay = await client.send_audio(-1001598544910, rip_file, duration=int(rip_data["duration"]), title=str(rip_data["title"]), thumb=thumb)
