@@ -120,7 +120,7 @@ async def song(client, message):
     try:
             with YoutubeDL(opts) as rip:
                 rip_data = rip.extract_info(url)
-                rip_file = rip.prepare_filename(rip_data)
+                rip_file = f"{rip_data['id']}.mp3"
             
             dir = os.listdir()
             if f"{rip_data['id']}.m4a.jpg" in dir:
@@ -135,7 +135,6 @@ async def song(client, message):
             await shed.delete()
             try:
                 os.remove(f"{rip_data['id']}.mp3")
-                os.remove(f"{rip_data['id']}.m4a")
                 os.remove(thumb)
             except Exception as eo:
                 print(eo)
@@ -258,7 +257,7 @@ async def yt_dl_audio(client, cb):
     try:
         with YoutubeDL(opts) as rip:
             rip_data = rip.extract_info(url)
-            rip_file = rip.prepare_filename(rip_data)
+            rip_file = f"{rip_data['id']}.mp3"
         dir = os.listdir()
         if f"{rip_data['id']}.m4a.jpg" in dir:
             thumb = f"{rip_data['id']}.m4a.jpg"
