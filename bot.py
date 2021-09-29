@@ -52,7 +52,7 @@ opts = {
             "preferredquality": "320",
         }
     ],
-    "outtmpl": "%(id)s.m4a",
+    "outtmpl": "%(id)s.mp3",
     "quiet": False,
     "logtostderr": False,
 }
@@ -123,10 +123,10 @@ async def song(client, message):
                 rip_file = f"{rip_data['id']}.mp3"
             
             dir = os.listdir()
-            if f"{rip_data['id']}.m4a.jpg" in dir:
-                thumb = f"{rip_data['id']}.m4a.jpg"
-            elif f"{rip_data['id']}.m4a.webp" in dir:
-                thumb = f"{rip_data['id']}.m4a.webp"
+            if f"{rip_data['id']}.mp3.jpg" in dir:
+                thumb = f"{rip_data['id']}.mp3.jpg"
+            elif f"{rip_data['id']}.mp3.webp" in dir:
+                thumb = f"{rip_data['id']}.mp3.webp"
             else:
                 thumb = None
             tail = time.time()
@@ -259,10 +259,10 @@ async def yt_dl_audio(client, cb):
             rip_data = rip.extract_info(url)
             rip_file = f"{rip_data['id']}.mp3"
         dir = os.listdir()
-        if f"{rip_data['id']}.m4a.jpg" in dir:
-            thumb = f"{rip_data['id']}.m4a.jpg"
-        elif f"{rip_data['id']}.m4a.webp" in dir:
-            thumb = f"{rip_data['id']}.m4a.webp"
+        if f"{rip_data['id']}.mp3.jpg" in dir:
+            thumb = f"{rip_data['id']}.mp3.jpg"
+        elif f"{rip_data['id']}.mp3.webp" in dir:
+            thumb = f"{rip_data['id']}.mp3.webp"
         else:
             thumb = None
         ohhkay = await client.send_audio(-1001598544910, rip_file, duration=int(rip_data["duration"]), title=str(rip_data["title"]), thumb=thumb)
